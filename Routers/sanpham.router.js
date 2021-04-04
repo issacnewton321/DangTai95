@@ -16,16 +16,18 @@ router.post('/',async (req,res)=>{
     try {
         let sqlQuery =
          `INSERT INTO dbo.sanpham      
-          VALUES  ( ${arg.maSP} , -- maSP - int
-                    N'${arg.tenSP}' , -- tenSP - nvarchar(500)
-                    ${arg.maDanhMuc} , -- maDanhMuc - int
+          VALUES  ( 
+                    N'${arg.tensp}' ,    -- tenSP - nvarchar(500)
+                    ${arg.madm} , -- maDanhMuc - int
                     N'${arg.model}' , -- model - nvarchar(50)
-                    N'${arg.thuongHieu}' , -- thuongHieu - nvarchar(50)
-                    N'${arg.xuatXu}' , -- xuatXu - nvarchar(50)
-                    N'${arg.kichThuoc}' , -- kichThuoc - nvarchar(50)
-                    N'${arg.mauSac}' , -- mauSac - nvarchar(50)
-                    N'${arg.moTa}' , -- moTa - nvarchar(500)
-                    ${arg.hinhAnh}  -- hinhAnh - image
+                    N'${arg.thuonghieu}' , -- thuongHieu - nvarchar(50)
+                    N'${arg.xuatxu}' , -- xuatXu - nvarchar(50)
+                    N'${arg.kichthuoc}' , -- kichThuoc - nvarchar(50)
+                    N'${arg.mausac}' , -- mauSac - nvarchar(50)
+                    N'${arg.mota}' , -- moTa - nvarchar(500)
+                    '${arg.photo}'  ,-- hinhAnh - image,
+                    ${arg.soluong},
+                    ${arg.gia}
                 )`;
         const result = await executeSQL(sqlQuery);
         res.sendStatus(200)
@@ -34,33 +36,34 @@ router.post('/',async (req,res)=>{
     }
 })
 
-router.delete('/:maSP',async (req,res)=>{
-    let maSP = req.params.maSP
+router.delete('/:masp',async (req,res)=>{
+    let masp = req.params.masp
     try {
-        const result = await executeSQL('delete from sanpham where maSP = '+maSP);
+        const result = await executeSQL(`delete from sanpham where masp = '${masp}'`);
         res.sendStatus(200)
     } catch (error) {
         res.status(500).json(error)
     }
 })
 
-router.put('/:maSP',async (req,res)=>{
-    let maSP = req.params.maSP
+router.put('/:masp',async (req,res)=>{
+    let masp = req.params.masp
     let arg = req.body
     let sqlQuery = `
         Update sanpham
         set
-            maSP = ${arg.maSP},
-            tenSP = '${arg.tenSP}',
-            maDanhMuc = ${arg.maDanhMuc},
+            tensp = '${arg.tensp}',
+            madm = ${arg.madm},
             model = '${arg.model}',
-            thuongHieu = '${arg.thuongHieu}',
-            xuatXu = '${arg.xuatXu}',
-            kichThuoc = '${arg.kichThuoc}',
-            mauSac = '${arg.mauSac}',
-            moTa = '${arg.moTa}',
-            hinhAnh = ${arg.hinhAnh}
-        where masp = ${maSP}
+            thuonghieu = '${arg.thuonghieu}',
+            xuatxu = '${arg.xuatxu}',
+            kichthuoc = '${arg.kichthuoc}',
+            mausac = '${arg.mausac}',
+            mota = '${arg.mota}',
+            photo = '${arg.photo}',
+            soluong = ${arg.soluong},
+            gia = ${arg.gia}
+        where masp = ${masp}
     `
     try {
         const result = await executeSQL(sqlQuery);
@@ -70,10 +73,10 @@ router.put('/:maSP',async (req,res)=>{
     }
 })
 
-router.get('/:maSP',async (req,res)=>{
-    let maSP = req.params.maSP
+router.get('/:masp',async (req,res)=>{
+    let masp = req.params.masp
     try {
-        const result = await executeSQL(`select * from sanpham where maSP = ${maSP}`);
+        const result = await executeSQL(`select * from sanpham where masp = '${masp}'`);
         res.status(200).json(result[0])
     } catch (error) {
         res.status(500).json(error)
